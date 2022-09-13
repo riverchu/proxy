@@ -10,7 +10,7 @@ import (
 func HttpServe(port int) {
 	l, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
 	if err != nil {
-		log.Error("listening port %d fail: %s", err)
+		log.Error("listening port %d fail: %s", port, err)
 		return
 	}
 	log.Info("listening port %d", port)
