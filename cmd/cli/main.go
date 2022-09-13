@@ -1,24 +1,31 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"time"
 
+	"github.com/riverchu/pkg/log"
 	"github.com/riverchu/proxy"
 )
 
+const interval = 10 * time.Second
+
 func main() {
-	fmt.Println("this is a proxy server")
-	fmt.Println("http proxy", os.Getenv("http_proxy"))
-	fmt.Println("https proxy", os.Getenv("https_proxy"))
+	log.Info("this is a proxy server")
+	if p := os.Getenv("http_proxy"); p != "" {
+		log.Info("detect http proxy: %s", p)
+	}
+	if p := os.Getenv("https_proxy"); p != "" {
+		log.Info("detect https proxy: %s", p)
+	}
 
 	go proxy.Serve()
 
-	for range time.Tick(10 * time.Second) {
-		fmt.Println("fetch result:")
+	log.Info("refresh interval: %s", interval)
+	for range time.Tick(interval) {
+		log.Info("proxy refreshing")
 		for _, p := range proxy.GetProxies().String() {
-			fmt.Println("proxy:", p)
+			log.Info("got proxy: %s", p)
 		}
 	}
 }
