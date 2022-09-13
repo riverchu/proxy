@@ -92,12 +92,20 @@ func (p *Proxy) Quality() Quality { return p.quality }
 // QualityLevel ...
 func (p *Proxy) QualityLevel() QualityLevel { return p.qualityLevel }
 
-// String ...
+// String return proxy url as string
 func (p *Proxy) String() string {
 	if p == nil {
 		return ""
 	}
 	return fmt.Sprintf("%s://%s:%d", p.Scheme, p.Host, p.Port)
+}
+
+// Target return host with port
+func (p *Proxy) Target() string {
+	if p == nil {
+		return ""
+	}
+	return fmt.Sprintf("%s:%d", p.Host, p.Port)
 }
 
 // URL convert to url

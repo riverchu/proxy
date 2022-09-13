@@ -11,7 +11,7 @@ import (
 const interval = 10 * time.Second
 
 func main() {
-	log.Info("this is a proxy server")
+	log.Info("this is a proxy provider")
 	if p := os.Getenv("http_proxy"); p != "" {
 		log.Info("detect http proxy: %s", p)
 	}
@@ -24,7 +24,7 @@ func main() {
 	log.Info("refresh interval: %s", interval)
 	for range time.Tick(interval) {
 		log.Info("proxy refreshing")
-		for _, p := range proxy.GetProxies(proxy.FilterProxyLevel(proxy.HIGH)).String() {
+		for _, p := range proxy.GetProxies(proxy.FilterProxyLevel(proxy.MEDIUM)).String() {
 			log.Info("got proxy: %s", p)
 		}
 	}

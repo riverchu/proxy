@@ -3,13 +3,17 @@ package proxy
 import (
 	"sync"
 	"time"
+
+	"github.com/riverchu/pkg/log"
 )
 
 var defaultServer = NewServer()
 
 // serve ...
 func serve() {
+	log.Info("proxy server refresh with interval: %s", refreshInterval)
 	for range time.Tick(refreshInterval) {
+		log.Info("proxy server refreshing")
 		defaultServer.Renew(FilterProxyLevel(MEDIUM))
 	}
 }
@@ -81,7 +85,7 @@ func (s *Server) Renew(opts ...FilterOption) *Server {
 		return s
 	}
 
-	set, proxies := s.unique(proxies...)
+	_, proxies = s.unique(proxies...)
 
 	proxies.JudgeQuality()
 
@@ -89,6 +93,8 @@ func (s *Server) Renew(opts ...FilterOption) *Server {
 	if len(proxies) == 0 {
 		return s
 	}
+
+	set, proxies := s.unique(proxies...)
 
 	s.mu.Lock()
 	defer s.mu.Unlock()

@@ -61,10 +61,6 @@ func DirectProxyConn(client net.Conn) {
 	io.Copy(client, server)
 }
 
-const (
-	proxyAddr = "127.0.0.1:7280"
-)
-
 // ProxyConn proxy connection
 func ProxyConn(client net.Conn) {
 	if client == nil {
@@ -83,6 +79,9 @@ func ProxyConn(client net.Conn) {
 	fmt.Sscanf(string(b[:bytes.IndexByte(b[:], '\n')]), "%s%s", &method, &host)
 
 	//获得了请求的host和port，就开始拨号吧
+	proxyAddr := GetProxy().Target()
+	log.Info("using proxy: %s", proxyAddr)
+
 	server, err := net.Dial("tcp", proxyAddr)
 	if err != nil {
 		log.Info("dail fail: %s", err)
