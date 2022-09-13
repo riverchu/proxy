@@ -10,25 +10,25 @@ import (
 var defaultServer = NewServer()
 
 // serve ...
-func serve() {
+func serve(sources ...Source) {
 	log.Info("proxy server refresh with interval: %s", refreshInterval)
 	for range time.Tick(refreshInterval) {
 		log.Info("proxy server refreshing")
-		defaultServer.Renew(FilterProxyLevel(MEDIUM))
+		defaultServer.RegisterSource(sources...).Renew(FilterProxyLevel(MEDIUM))
 	}
 }
 
 // NewServer ...
 func NewServer() (server *Server) {
 	defer func() { go func() { server.Reload().Unique().JudgeQuality().Filter(FilterProxyLevel(MEDIUM)) }() }()
-	return (&Server{sources: ProxySourceList[:]})
+	return new(Server)
 }
 
 // Server ...
 type Server struct {
 	mu sync.RWMutex
 	// sources proxy source
-	sources []Source
+	sources map[string]Source
 	// proxies all proxies
 	proxies ProxyArray
 
@@ -104,9 +104,28 @@ func (s *Server) Renew(opts ...FilterOption) *Server {
 	return s
 }
 
+// RegisterSource register source
+func (s *Server) RegisterSource(sources ...Source) *Server {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	if s.sources == nil {
+		s.sources = make(map[string]Source)
+	}
+
+	for _, source := range sources {
+		if _, ok := s.sources[source.Name()]; ok {
+			continue
+		}
+		s.sources[source.Name()] = source
+	}
+	return s
+}
+
 // getProxies get proxy from sources
 func (s *Server) getProxies() (proxies ProxyArray) {
-	for _, source := range s.sources {
+	for _, source := range s.getSources() {
+		log.Debug("loading source %s...", source.Name())
 		proxies = append(proxies, source.GetProxies()...)
 	}
 	return
@@ -159,4 +178,10 @@ func (s *Server) filter(proxies []*Proxy, opts ...FilterOption) (ps []*Proxy) {
 		}
 	}
 	return ps
+}
+
+func (s *Server) getSources() map[string]Source {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	return s.sources
 }

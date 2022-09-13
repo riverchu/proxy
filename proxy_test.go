@@ -11,10 +11,6 @@ func TestGetProxy(t *testing.T) {
 	}
 }
 
-func Test_JudgedProxy(t *testing.T) {
-	t.Logf("fate0 quality: %v", fate0ProxyList.JudgeQuality())
-}
-
 func Test_ICMP(t *testing.T) {
 	delay, err := (&Proxy{}).ICMPTest("127.0.0.1")
 	if err != nil {
@@ -49,12 +45,5 @@ func TestProxyServe(t *testing.T) {
 }
 
 func TestProxyServe_Renew(t *testing.T) {
-	(&Server{sources: ProxySourceList[:]}).Renew()
-}
-
-func TestSource_GetProxies(t *testing.T) {
-	t.Logf("mimvp get proxies: %d", len(dieniao.GetProxies()))
-	t.Logf("proxy66 get proxies: %d", len(dieniao.GetProxies()))
-	t.Logf("kxdaili get proxies: %d", len(dieniao.GetProxies()))
-	t.Logf("dieniao get proxies: %d", len(dieniao.GetProxies()))
+	new(Server).Renew()
 }

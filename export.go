@@ -10,11 +10,11 @@ func init() {
 }
 
 // Serve singlton Serve
-func Serve() {
+func Serve(sources ...Source) {
 	log.Info("Proxy Server Starting...")
 	defer log.Info("Proxy Server Stopped...")
 
-	serve()
+	serve(sources...)
 }
 
 // GetProxy get one proxy
@@ -25,4 +25,9 @@ func GetProxy(opts ...FilterOption) *Proxy {
 // GetProxies get all proxies
 func GetProxies(opts ...FilterOption) ProxyArray {
 	return defaultServer.GetProxies(opts...)
+}
+
+// RegisterSource register source
+func RegisterSource(sources ...Source) {
+	defaultServer.RegisterSource(sources...)
 }
