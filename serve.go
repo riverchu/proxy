@@ -1,16 +1,19 @@
 package proxy
 
 import (
+	"fmt"
 	"net"
 
 	"github.com/riverchu/pkg/log"
 )
 
-func HttpServe(port string) {
-	l, err := net.Listen("tcp", ":"+port)
+func HttpServe(port int) {
+	l, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
 	if err != nil {
 		log.Error("listening port %d fail: %s", err)
+		return
 	}
+	log.Info("listening port %d", port)
 
 	for {
 		client, err := l.Accept()
