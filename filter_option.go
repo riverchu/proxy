@@ -14,7 +14,21 @@ var (
 		return func(p *Proxy) bool { return p.quality >= quality }
 	}
 
-	// FilterN filter n proxies
+	// FilterSource filter proxy source
+	FilterSource = func(source string) FilterOption {
+		return func(p *Proxy) bool {
+			return p.Source == source
+		}
+	}
+
+	// FilterSchema filter proxy schema
+	FilterSchema = func(schema string) FilterOption {
+		return func(p *Proxy) bool {
+			return p.Scheme == schema
+		}
+	}
+
+	// FilterN filter n proxies must be last option
 	FilterN = func(n int) FilterOption {
 		if n <= 0 {
 			return func(*Proxy) bool { return false }
