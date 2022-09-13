@@ -6,11 +6,11 @@ type Quality int64
 // Judge ...
 func (q Quality) Judge() QualityLevel {
 	switch {
-	case q >= 100:
+	case q >= HIGH.Threshold():
 		return HIGH
-	case q >= 50:
+	case q >= MEDIUM.Threshold():
 		return MEDIUM
-	case q > 20:
+	case q > LOW.Threshold():
 		return LOW
 	default:
 		return UNAVAILABLE
@@ -43,5 +43,20 @@ func (p QualityLevel) String() string {
 		return "HIGH"
 	default:
 		return "UNKNOWN"
+	}
+}
+
+func (p QualityLevel) Threshold() Quality {
+	switch p {
+	case HIGH:
+		return 100
+	case MEDIUM:
+		return 50
+	case LOW:
+		return 20
+	case UNAVAILABLE:
+		return 0
+	default:
+		return 0
 	}
 }

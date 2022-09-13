@@ -10,13 +10,13 @@ var defaultServer = NewServer()
 // serve ...
 func serve() {
 	for range time.Tick(refreshInterval) {
-		defaultServer.Renew(FilterLowProxy)
+		defaultServer.Renew(FilterProxyLevel(MEDIUM))
 	}
 }
 
 // NewServer ...
 func NewServer() (server *Server) {
-	defer func() { go func() { server.Reload().Unique().JudgeQuality().Filter(FilterLowProxy) }() }()
+	defer func() { go func() { server.Reload().Unique().JudgeQuality().Filter(FilterProxyLevel(MEDIUM)) }() }()
 	return (&Server{sources: ProxySourceList[:]})
 }
 
