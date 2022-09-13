@@ -6,11 +6,11 @@ type FilterOption func(*Proxy) (pass bool)
 var (
 	// FilterProxyLevel filter low quality
 	FilterProxyLevel = func(level QualityLevel) FilterOption {
-		return FilterProxyQuality(level.Threshold())
+		return FilterProxy(level.Threshold())
 	}
 
-	// FilterProxyQuality filter proxy with quality
-	FilterProxyQuality = func(quality Quality) FilterOption {
+	// FilterProxy filter proxy with quality
+	FilterProxy = func(quality Quality) FilterOption {
 		return func(p *Proxy) bool { return p.quality >= quality }
 	}
 

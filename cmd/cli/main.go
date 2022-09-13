@@ -24,7 +24,7 @@ func main() {
 	log.Info("refresh interval: %s", interval)
 	for range time.Tick(interval) {
 		log.Info("proxy refreshing")
-		for _, p := range proxy.GetProxies().String() {
+		for _, p := range proxy.GetProxies(proxy.FilterProxyLevel(proxy.HIGH)).String() {
 			log.Info("got proxy: %s", p)
 		}
 	}
