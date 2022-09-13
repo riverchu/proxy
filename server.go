@@ -107,11 +107,8 @@ func (s *Server) getProxies() (proxies ProxyArray) {
 }
 
 // GetProxy ...
-func (s *Server) GetProxy() *Proxy {
-	s.mu.RLock()
-	defer s.mu.RUnlock()
-
-	return s.proxies.Pick()
+func (s *Server) GetProxy(opts ...FilterOption) *Proxy {
+	return s.GetProxies(opts...).Pick()
 }
 
 // GetProxies ...

@@ -18,8 +18,8 @@ func Serve() {
 }
 
 // GetProxy get one proxy
-func GetProxy() *Proxy {
-	return defaultServer.GetProxy()
+func GetProxy(opts ...FilterOption) *Proxy {
+	return defaultServer.GetProxy(opts...)
 }
 
 // GetProxies get all proxies
