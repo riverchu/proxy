@@ -33,7 +33,7 @@ func Test_Get(t *testing.T) {
 
 func Test_FilterProxy(t *testing.T) {
 	defaultServer.JudgeQuality()
-	proxies := defaultServer.Filter(FilterLowProxy).GetProxies()
+	proxies := defaultServer.Filter(FilterProxyLevel(MEDIUM)).GetProxies()
 	for _, p := range proxies {
 		t.Logf("get proxy: %s", p)
 	}

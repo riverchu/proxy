@@ -4,9 +4,9 @@ package proxy
 type FilterOption func(*Proxy) (pass bool)
 
 var (
-	// FilterLowProxy filter low quality
-	FilterLowProxy FilterOption = func(p *Proxy) bool {
-		return p.QualityLevel() >= MEDIUM
+	// FilterProxyLevel filter low quality
+	FilterProxyLevel = func(level QualityLevel) FilterOption {
+		return FilterProxyQuality(level.Threshold())
 	}
 
 	// FilterProxyQuality filter proxy with quality
@@ -20,10 +20,9 @@ var (
 			return func(*Proxy) bool { return false }
 		}
 
-		count := 0
-		return func(p *Proxy) bool {
-			defer func() { count++ }()
-			return count < n
+		return func(*Proxy) bool {
+			defer func() { n-- }()
+			return n > 0
 		}
 	}
 )
