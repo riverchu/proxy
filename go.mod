@@ -2,7 +2,7 @@ module github.com/riverchu/proxy
 
 go 1.17
 
-require github.com/riverchu/pkg v0.0.1
+require github.com/riverchu/pkg v0.0.5
 
 require (
 	github.com/miekg/dns v1.1.50 // indirect

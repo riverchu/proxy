@@ -6,6 +6,7 @@ import (
 
 	"github.com/riverchu/pkg/log"
 	"github.com/riverchu/proxy"
+	_ "github.com/riverchu/proxy/source"
 )
 
 var (
